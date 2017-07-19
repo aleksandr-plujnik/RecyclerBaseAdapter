@@ -1,0 +1,28 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="#ccc"
+    android:clickable="true">
+
+    <TextView
+        android:id="@+id/tvTitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:padding="8dp"
+        android:text="@string/hello_header"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+    <Button
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/btHeaderClick"
+        android:layout_marginBottom="4dp"
+        android:background="?selectableItemBackground"
+        android:text="Click me"/>
+</RelativeLayout>
