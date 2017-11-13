@@ -1,10 +1,10 @@
-package com.github.recyclerbind;
+package com.github.aleksandrp;
 
 import android.support.annotation.Nullable;
 import android.view.ViewGroup;
 
-import com.github.recyclerbind.base.BaseAdapter;
-import com.github.recyclerbind.base.BaseHolder;
+import com.github.aleksandrp.base.BaseAdapter;
+import com.github.aleksandrp.base.BaseHolder;
 
 import java.util.List;
 

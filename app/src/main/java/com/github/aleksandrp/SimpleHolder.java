@@ -1,10 +1,10 @@
-package com.github.recyclerbind;
+package com.github.aleksandrp;
 
 import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.recyclerbind.base.BaseHolder;
+import com.github.aleksandrp.base.BaseHolder;
 
 import java.util.Locale;
 
@@ -15,12 +15,12 @@ import java.util.Locale;
  * @author Aleks Sander
  */
 
-final class BurgerHolder extends BaseHolder<BurgerModel> {
+final class SimpleHolder extends BaseHolder<BurgerModel> {
 
     private TextView burgerName;
 
-    BurgerHolder(ViewGroup parent) {
-        super(parent, android.R.layout.simple_list_item_1, null);
+    SimpleHolder(ViewGroup parent) {
+        super(parent, android.R.layout.simple_list_item_1, new int[]{android.R.id.text1});
         burgerName = (TextView) itemView;
     }
 

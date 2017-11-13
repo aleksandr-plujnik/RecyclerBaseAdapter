@@ -1,4 +1,4 @@
-package com.github.recyclerbind;
+package com.github.aleksandrp;
 
 import android.support.annotation.NonNull;
 

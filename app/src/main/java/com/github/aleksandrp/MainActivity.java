@@ -1,8 +1,6 @@
-package com.github.recyclerbind;
+package com.github.aleksandrp;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
-import com.github.recyclerbind.base.BaseAdapter;
-import com.github.recyclerbind.base.BaseHolder;
+import com.github.aleksandrp.base.BaseAdapter;
+import com.github.aleksandrp.base.BaseHolder;
+import com.github.recyclerbind.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements BaseHolder.OnHold
     }
 
     private void initRecycler() {
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements BaseHolder.OnHold
 
 
 
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                recyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         BurgerModel burgerModel = burgers.get(2);
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements BaseHolder.OnHold
                 headerAdapter1.showHeader();
                 recyclerView.setAdapter(headerAdapter1);
 
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                recyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         headerAdapter1.clearItems();
@@ -140,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements BaseHolder.OnHold
 
                 }, 3000);
 
-//                new Handler(Looper.getMainLooper()).postDelayed(headerAdapter::hideHeader, 2000);
+//                recyclerView.postDelayed(headerAdapter::hideHeader, 2000);
 
                 break;
             case R.id.btFooter:
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements BaseHolder.OnHold
                 footerAdapter.showFooter();
                 recyclerView.setAdapter(footerAdapter);
 
-//                new Handler(Looper.getMainLooper()).postDelayed(footerAdapter::hideFooter, 3000);
+//                recyclerView.postDelayed(footerAdapter::hideFooter, 3000);
 
                 break;
             case R.id.btEndless:
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements BaseHolder.OnHold
     private void loadMore() {
         Log.d(TAG, "loadMore: " + offset + "; ");
         endlessAdapter.showFooter();
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+        recyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 ArrayList<BurgerModel> newItems = generateNewItems();

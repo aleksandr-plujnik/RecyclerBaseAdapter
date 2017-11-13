@@ -1,4 +1,4 @@
-package com.github.recyclerbind.base;
+package com.github.aleksandrp.base;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,12 +22,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
     private static final int TYPE_FOOTER = 2;
     private static final int TYPE_CONTENT = 3;
 
-    /**
-     * Lock used to modify the content of {@link #list}. Any write operation
-     * performed on the array should be synchronized on this lock.
-     */
-    private final Object mLock = new Object();
-
     @Nullable
     private List<T> list;
 
@@ -36,6 +30,12 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
 
     @Nullable
     private OnNeedMoreItemsListener needMoreItemsListener;
+
+    @Nullable
+    private BaseHolder<T> headerHolder;
+
+    @Nullable
+    private BaseHolder<T> footerHolder;
 
     private boolean hasHeader;
     private boolean hasFooter;
@@ -92,6 +92,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
                     throw new IllegalArgumentException("Need to override the onCreateHeaderViewHolder(ViewGroup) method in your adapter");
                 }
                 holder.setOnHolderClickListener(listener);
+                headerHolder = holder;
                 break;
             case TYPE_FOOTER:
                 holder = onCreateFooterViewHolder(parent);
@@ -99,6 +100,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
                     throw new IllegalArgumentException("Need to override the onCreateFooterViewHolder(ViewGroup) method in your adapter");
                 }
                 holder.setOnHolderClickListener(listener);
+                footerHolder = holder;
                 break;
             default:
                 holder = onCreateContentViewHolder(parent);
@@ -137,6 +139,16 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
         }
     }
 
+    @Nullable
+    public BaseHolder<T> getHeaderHolder() {
+        return headerHolder;
+    }
+
+    @Nullable
+    public BaseHolder<T> getFooterHolder() {
+        return footerHolder;
+    }
+
     private boolean isNeedMoreItem(int position) {
         return needMoreItemsListener != null && !isDownloading && hasMoreItems && position == getItemCount() - 1;
     }
@@ -169,26 +181,24 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
     }
 
     public void noMoreItems() {
-        this.hasMoreItems = false;
+        hasMoreItems = false;
     }
 
-    public void addNewItems(@Nullable List<T> additionalItems) {
-        synchronized (mLock) {
-            isDownloading = false;
-            if (this.list == null) {
-                this.list = additionalItems;
-                notifyDataSetChanged();
-                return;
-            }
-            if (additionalItems != null) {
-                boolean isAdded = this.list.addAll(additionalItems);
-                if (isAdded) notifyDataSetChanged();
-            }
+    public synchronized void addNewItems(@Nullable List<T> additionalItems) {
+        isDownloading = false;
+        if (list == null) {
+            list = additionalItems;
+            notifyDataSetChanged();
+            return;
+        }
+        if (additionalItems != null) {
+            boolean isAdded = list.addAll(additionalItems);
+            if (isAdded) notifyDataSetChanged();
         }
     }
 
     @Nullable
-    public List<T> getItems() {
+    public synchronized List<T> getItems() {
         return list;
     }
 
@@ -197,34 +207,23 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
      *
      * @param item The object to remove.
      */
-    public void removeItem(@Nullable T item) {
-        if (item == null) return;
-        synchronized (mLock) {
-            if (list != null) {
-                int removedIndex = 0;
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).equals(item)) {
-                        removedIndex = i;
-                        break;
-                    }
-                }
-                list.remove(removedIndex);
-
-                if (hasHeader) removedIndex++;
-                notifyItemRemoved(removedIndex);
-            }
+    public synchronized void removeItem(@Nullable T item) {
+        if (item == null || list == null) return;
+        int removedIndex = list.indexOf(item);
+        if (removedIndex >= 0) {
+            list.remove(removedIndex);
+            if (hasHeader) removedIndex++;
+            notifyItemRemoved(removedIndex);
         }
     }
 
     /**
      * Remove all elements from the list.
      */
-    public void clearItems() {
-        synchronized (mLock) {
-            if (list != null) {
-                list.clear();
-                notifyDataSetChanged();
-            }
+    public synchronized void clearItems() {
+        if (list != null) {
+            list.clear();
+            notifyDataSetChanged();
         }
     }
 

@@ -1,9 +1,10 @@
-package com.github.recyclerbind;
+package com.github.aleksandrp;
 
 import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 
-import com.github.recyclerbind.base.BaseHolder;
+import com.github.aleksandrp.base.BaseHolder;
+import com.github.recyclerbind.R;
 
 /**
  * Created on 13.07.2017

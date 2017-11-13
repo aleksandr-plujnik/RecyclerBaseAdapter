@@ -1,4 +1,4 @@
-package com.github.recyclerbind.base;
+package com.github.aleksandrp.base;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
